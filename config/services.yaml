@@ -7,62 +7,41 @@ services:
         autowire: true
         autoconfigure: true
 
-    # OneToMany / AI / Files / Actions
-    OneToMany\AI\Action\File\CacheFileAction:
-        arguments:
-            $fileClientFactory: '@OneToMany\AI\Factory\FileClientFactory'
+    # OneToMany / AI
+    OneToMany\AI\Factory\ClientFactory:
+        abstract: true
 
-    OneToMany\AI\Contract\Action\File\CacheFileActionInterface:
-        alias: OneToMany\AI\Action\File\CacheFileAction
+    # OneToMany / AI / Files / Actions
+    OneToMany\AI\Contract\Action\File\UploadFileActionInterface:
+        alias: OneToMany\AI\Action\File\UploadFileAction
+
+    OneToMany\AI\Action\File\UploadFileAction:
+        arguments:
+            $clientFactory: '@OneToMany\AI\Factory\FileClientFactory'
 
     # OneToMany / AI / Files / Clients
     OneToMany\AI\Factory\FileClientFactory:
+        class: OneToMany\AI\Factory\ClientFactory
         arguments:
-            $clients: !tagged_locator { tag: 1tomany.ai.clients.file_client, default_index_method: 'getVendor' }
+            $clients: !tagged_iterator { tag: 1tomany.ai.file_client }
 
-    OneToMany\AI\Client\Gemini\FileClient:
+    # OneToMany / AI / Queries / Actions
+    OneToMany\AI\Contract\Action\Query\CompileQueryActionInterface:
+        alias: OneToMany\AI\Action\Query\CompileQueryAction
+
+    OneToMany\AI\Contract\Action\Query\ExecuteQueryActionInterface:
+        alias: OneToMany\AI\Action\Query\ExecuteQueryAction
+
+    OneToMany\AI\Action\Query\CompileQueryAction:
         arguments:
-            $geminiApiKey: '%env(default::GEMINI_API_KEY)%'
+            $clientFactory: '@OneToMany\AI\Factory\QueryClientFactory'
 
-    OneToMany\AI\Client\OpenAi\FileClient:
+    OneToMany\AI\Action\Query\ExecuteQueryAction:
         arguments:
-            $openaiApiKey: '%env(default::OPENAI_API_KEY)%'
+            $clientFactory: '@OneToMany\AI\Factory\QueryClientFactory'
 
-    # OneToMany / AI / Prompts / Actions
-    OneToMany\AI\Action\Prompt\CompilePromptAction:
+    # OneToMany / AI / Queries / Clients
+    OneToMany\AI\Factory\QueryClientFactory:
+        class: OneToMany\AI\Factory\ClientFactory
         arguments:
-            $promptClientFactory: '@OneToMany\AI\Factory\PromptClientFactory'
-
-    OneToMany\AI\Action\Prompt\DispatchPromptAction:
-        arguments:
-            $promptClientFactory: '@OneToMany\AI\Factory\PromptClientFactory'
-
-    OneToMany\AI\Contract\Action\Prompt\CompilePromptActionInterface:
-        alias: OneToMany\AI\Action\Prompt\CompilePromptAction
-
-    OneToMany\AI\Contract\Action\Prompt\DispatchPromptActionInterface:
-        alias: OneToMany\AI\Action\Prompt\DispatchPromptAction
-
-    # OneToMany / AI / Prompts / Clients
-    OneToMany\AI\Factory\PromptClientFactory:
-         arguments:
-            $clients: !tagged_locator { tag: 1tomany.ai.clients.prompt_client, index_by: key }
-
-    OneToMany\AI\Client\Gemini\PromptClient:
-        arguments:
-            $geminiApiKey: '%env(default::GEMINI_API_KEY)%'
-        tags:
-            - { name: 1tomany.ai.clients.prompt_client, key: gemini }
-
-    OneToMany\AI\Client\Gemini\Serializer\PromptNormalizer:
-        tags: [serializer.normalizer]
-
-    OneToMany\AI\Client\Mock\PromptClient:
-        tags:
-            - { name: 1tomany.ai.clients.prompt_client, key: mock }
-
-    OneToMany\AI\Client\Mock\Serializer\PromptNormalizer:
-        tags: [serializer.normalizer]
-
-    OneToMany\AI\Client\OpenAi\Serializer\PromptNormalizer:
-        tags: [serializer.normalizer]
+            $clients: !tagged_iterator { tag: 1tomany.ai.query_client }

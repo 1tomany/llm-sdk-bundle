@@ -72,11 +72,11 @@ class PhpAiBundle extends AbstractBundle
                         $definition->setArgument('$apiKey', $apiKey);
                     }
 
-                    if ($httpClient = $vendorConfig['http_client'] ?? null) {
+                    if (null !== $httpClient = $vendorConfig['http_client'] ?? null) {
                         $definition->setArgument('$httpClient', new Reference($httpClient));
                     }
 
-                    if ($serializer = $vendorConfig['serializer'] ?? null) {
+                    if (null !== $serializer = $vendorConfig['serializer'] ?? null) {
                         $definition->setArgument('$denormalizer', new Reference($serializer));
                     }
                 }

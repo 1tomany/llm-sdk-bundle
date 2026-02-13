@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-use function vsprintf;
-
 class PhpAiBundle extends AbstractBundle
 {
     /**

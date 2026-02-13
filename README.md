@@ -16,6 +16,10 @@ Create a file named `php_ai.yaml` in `config/packages/` and add the following li
 
 ```yaml
 php_ai:
+    claude:
+        api_key: '%env(CLAUDE_API_KEY)%'
+        # http_client: 'http_client'
+        # serializer: 'serializer'
     gemini:
         api_key: '%env(GEMINI_API_KEY)%'
         # http_client: 'http_client'
@@ -33,7 +37,7 @@ when@dev:
 
 By default, the `http_client` and `serializer` properties in the `gemini` and `openai` blocks use the `@http_client` and `@serializer` services defined in a standard Symfony application. You're free to use your own scoped HTTP Client or Serializer services.
 
-If you wish to disable a vendor, simply delete the configuration block from the file. For example, if your application only uses Gemini, you would delete the `openai` block:
+If you wish to disable a vendor, simply delete the configuration block from the file. For example, if your application only uses Gemini, you would delete the `claude` and `openai` blocks, leaving you with:
 
 ```yaml
 php_ai:

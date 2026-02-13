@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-use function vsprintf;
-
 class PhpAiBundle extends AbstractBundle
 {
     /**
@@ -30,6 +28,12 @@ class PhpAiBundle extends AbstractBundle
 
     /**
      * @param array{
+     *   claude: array{
+     *     api_key: non-empty-string,
+     *     enabled: bool,
+     *     http_client: non-empty-string,
+     *     serializer: non-empty-string,
+     *   },
      *   gemini: array{
      *     api_key: non-empty-string,
      *     enabled: bool,
@@ -52,10 +56,8 @@ class PhpAiBundle extends AbstractBundle
         $container->import('../config/services.php');
 
         foreach ($config as $vendor => $vendorConfig) {
-            foreach ($this->clients as $clientType) {
-                $id = vsprintf('php_ai.client.%s.%s', [
-                    $vendor, $clientType,
-                ]);
+            foreach ($this->clients as $idx => $client) {
+                $id = "php_ai.client.{$vendor}.{$client}";
 
                 if (!$builder->has($id)) {
                     continue;
@@ -70,12 +72,12 @@ class PhpAiBundle extends AbstractBundle
                         $definition->setArgument('$apiKey', $apiKey);
                     }
 
-                    if ($httpClient = $vendorConfig['http_client'] ?? null) {
+                    if (null !== $httpClient = $vendorConfig['http_client'] ?? null) {
                         $definition->setArgument('$httpClient', new Reference($httpClient));
                     }
 
-                    if ($serializer = $vendorConfig['serializer'] ?? null) {
-                        $definition->setArgument('$serializer', new Reference($serializer));
+                    if (null !== $serializer = $vendorConfig['serializer'] ?? null) {
+                        $definition->setArgument('$denormalizer', new Reference($serializer));
                     }
                 }
             }

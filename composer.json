@@ -1,13 +1,13 @@
 {
-    "name": "1tomany/php-ai-bundle",
-    "description": "Symfony bundle that provides bindings for the 1tomany/php-ai package",
+    "name": "1tomany/ai-clients-bundle",
+    "description": "Symfony bundle that provides bindings for the 1tomany/ai-clients package",
     "license": "MIT",
     "type": "symfony-bundle",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "php": ">=8.4",
-        "1tomany/php-ai": "^0.0.8",
+        "1tomany/ai-clients": "^0.1.2",
         "symfony/config": "^7.2|^8.0",
         "symfony/dependency-injection": "^7.2|^8.0",
         "symfony/http-kernel": "^7.2|^8.0"
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "OneToMany\\PhpAiBundle\\": "src/"
+            "OneToMany\\AI\\Clients\\Bundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "OneToMany\\PhpAiBundle\\Tests\\": "tests/"
+            "OneToMany\\AI\\Clients\\Bundle\\Tests\\": "tests/"
         }
     },
     "scripts": {

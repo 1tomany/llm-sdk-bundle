@@ -1,33 +1,33 @@
 # PHP AI Bundle for Symfony
 
-This package wraps the `1tomany/php-ai` library into an easy to use Symfony bundle.
+This package wraps the `1tomany/ai-clients` library into an easy to use Symfony bundle.
 
 ## Installation
 
 Install the bundle using Composer:
 
 ```
-composer require 1tomany/php-ai-bundle
+composer require 1tomany/ai-clients-bundle
 ```
 
 ## Configuration
 
-Create a file named `php_ai.yaml` in `config/packages/` and add the following lines:
+Below is the complete configuration for this bundle. To customize it for your Symfony application, create a file named `ai_clients.yaml` in `config/packages/` and make the necessary changes.
 
 ```yaml
 php_ai:
     claude:
         api_key: '%env(CLAUDE_API_KEY)%'
-        # http_client: 'http_client'
-        # serializer: 'serializer'
+        http_client: 'http_client'
+        serializer: 'serializer'
     gemini:
         api_key: '%env(GEMINI_API_KEY)%'
-        # http_client: 'http_client'
-        # serializer: 'serializer'
+        http_client: 'http_client'
+        serializer: 'serializer'
     openai:
         api_key: '%env(OPENAI_API_KEY)%'
-        # http_client: 'http_client'
-        # serializer: 'serializer'
+        http_client: 'http_client'
+        serializer: 'serializer'
 
 when@dev:
     php_ai:
@@ -35,7 +35,7 @@ when@dev:
             enabled: true
 ```
 
-By default, the `http_client` and `serializer` properties in the `gemini` and `openai` blocks use the `@http_client` and `@serializer` services defined in a standard Symfony application. You're free to use your own scoped HTTP Client or Serializer services.
+By default, the `http_client` and `serializer` properties in the `claude`, `gemini` and `openai` blocks use the `@http_client` and `@serializer` services defined in a standard Symfony application. You're free to use your own scoped HTTP client or serializer services.
 
 If you wish to disable a vendor, simply delete the configuration block from the file. For example, if your application only uses Gemini, you would delete the `claude` and `openai` blocks, leaving you with:
 
@@ -49,7 +49,7 @@ You'll also have to define the API keys in your `.env` file or by using the [Sym
 
 ## Usage
 
-Any action interface can be injected into a service. Because you can have multiple clients loaded in at once, the model passed into the request dictates what client to use. This makes it very easy to allow your users to select amongst any client supported by the core `1tomany/php-ai` library.
+Any action interface can be injected into a service. Because you can have multiple clients loaded in at once, the model passed into the request dictates what client to use. This makes it very easy to allow your users to select amongst any client supported by the core `1tomany/ai-clients` library.
 
 ```php
 <?php

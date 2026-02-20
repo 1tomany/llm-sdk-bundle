@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\AI\ClientsBundle;
+namespace OneToMany\Bundle\AI\Clients;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class ClientsBundle extends AbstractBundle
 {
-    protected string $extensionAlias = 'ai_clients';
+    protected string $extensionAlias = 'otm_ai_clients';
 
     /**
      * @var non-empty-list<'file'|'query'>

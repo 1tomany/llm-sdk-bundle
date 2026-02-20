@@ -1,21 +1,21 @@
-# AI and LLM Client Bundle for Symfony
+# AI and LLM SDK Bundle for Symfony
 
-This package wraps the `1tomany/ai-clients` library into an easy to use Symfony bundle.
+This package wraps the `1tomany/llm-sdk` library into an easy to use Symfony bundle.
 
 ## Installation
 
 Install the bundle using Composer:
 
 ```
-composer require 1tomany/ai-clients-bundle
+composer require 1tomany/llm-sdk-bundle
 ```
 
 ## Configuration
 
-Below is the complete configuration for this bundle. To customize it for your Symfony application, create a file named `ai_clients.yaml` in `config/packages/` and make the necessary changes.
+Below is the complete configuration for this bundle. To customize it for your Symfony application, create a file named `llm_sdk.yaml` in `config/packages/` and make the necessary changes.
 
 ```yaml
-php_ai:
+llm_sdk:
     claude:
         api_key: '%env(CLAUDE_API_KEY)%'
         http_client: 'http_client'
@@ -30,7 +30,7 @@ php_ai:
         serializer: 'serializer'
 
 when@dev:
-    php_ai:
+    llm_sdk:
         mock:
             enabled: true
 ```
@@ -40,7 +40,7 @@ By default, the `http_client` and `serializer` properties in the `claude`, `gemi
 If you wish to disable a vendor, simply delete the configuration block from the file. For example, if your application only uses Gemini, you would delete the `claude` and `openai` blocks, leaving you with:
 
 ```yaml
-php_ai:
+llm_sdk:
     gemini:
         api_key: '%env(GEMINI_API_KEY)%'
 ```
@@ -49,15 +49,15 @@ You'll also have to define the API keys in your `.env` file or by using the [Sym
 
 ## Usage
 
-Any action interface can be injected into a service. Because you can have multiple clients loaded in at once, the model passed into the request dictates what client to use. This makes it very easy to allow your users to select amongst any client supported by the core `1tomany/ai-clients` library.
+Any action interface can be injected into a service. Because you can have multiple clients loaded in at once, the model passed into the request dictates what client to use. This makes it very easy to allow your users to select amongst any client supported by the core `1tomany/llm_sdk` library.
 
 ```php
 <?php
 
 namespace App\File\Action\Handler;
 
-use OneToMany\AI\Contract\Action\File\UploadFileActionInterface;
-use OneToMany\AI\Contract\Action\Query\ExecuteQueryActionInterface;
+use OneToMany\LlmSdk\Contract\Action\File\UploadFileActionInterface;
+use OneToMany\LlmSdk\Contract\Action\Query\ExecuteQueryActionInterface;
 
 use function mime_content_type;
 
@@ -87,7 +87,7 @@ final readonly class QueryFileHandler
             'request' => $uploadRequest,
         ]);
         
-        // $response instanceof \OneToMany\AI\Response\File\UploadResponse
+        // $response instanceof \OneToMany\LlmSdk\Response\File\UploadResponse
         $fileUri = $response->getUri();
         
         // Compile and execute a query using the file
@@ -99,7 +99,7 @@ final readonly class QueryFileHandler
             'request' => $compileRequest,
         ]);
         
-        // $response instanceof \OneToMany\AI\Response\Query\ExecuteResponse
+        // $response instanceof \OneToMany\LlmSdk\Response\Query\ExecuteResponse
         printf("Model output: %s\n", $response->getOutput());
     }
 }

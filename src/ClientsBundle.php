@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class ClientsBundle extends AbstractBundle
 {
-    protected string $extensionAlias = 'otm_ai_clients';
+    protected string $extensionAlias = 'ai_clients';
 
     /**
      * @var non-empty-list<'file'|'query'>
@@ -59,7 +59,7 @@ class ClientsBundle extends AbstractBundle
 
         foreach ($config as $vendor => $vendorConfig) {
             foreach ($this->clients as $idx => $client) {
-                $id = "otm.ai.clients.client.{$vendor}.{$client}";
+                $id = "1tomany.ai.clients.client.{$vendor}.{$client}";
 
                 if (!$builder->has($id)) {
                     continue;

@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "OneToMany\\AiClientsBundle\\": "src/"
+            "OneToMany\\Bundle\\AI\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "OneToMany\\AiClientsBundle\\Tests\\": "tests/"
+            "OneToMany\\Bundle\\AI\\Tests\\": "tests/"
         }
     },
     "scripts": {

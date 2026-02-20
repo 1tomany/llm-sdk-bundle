@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\AiClientsBundle;
+namespace OneToMany\Bundle\AI;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,8 +8,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class AiClientsBundle extends AbstractBundle
+class ClientsBundle extends AbstractBundle
 {
+    protected string $extensionAlias = 'ai_clients';
+
     /**
      * @var non-empty-list<'file'|'query'>
      */

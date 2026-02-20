@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\Bundle;
+namespace OneToMany\AiClientsBundle;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -57,7 +57,7 @@ class AiClientsBundle extends AbstractBundle
 
         foreach ($config as $vendor => $vendorConfig) {
             foreach ($this->clients as $idx => $client) {
-                $id = "1tomany.ai.clients.client.{$vendor}.{$client}";
+                $id = "otm.ai.clients.client.{$vendor}.{$client}";
 
                 if (!$builder->has($id)) {
                     continue;

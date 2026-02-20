@@ -1,4 +1,4 @@
-# PHP AI Bundle for Symfony
+# AI and LLM Client Bundle for Symfony
 
 This package wraps the `1tomany/ai-clients` library into an easy to use Symfony bundle.
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\Bundle\AI;
+namespace OneToMany\AI;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

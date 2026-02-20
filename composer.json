@@ -1,6 +1,6 @@
 {
-    "name": "1tomany/ai-clients-bundle",
-    "description": "Symfony bundle that provides bindings for the 1tomany/ai-clients package",
+    "name": "1tomany/llm-sdk-bundle",
+    "description": "Symfony bundle that provides bindings for the 1tomany/llm-sdk package",
     "license": "MIT",
     "type": "symfony-bundle",
     "minimum-stability": "stable",
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "OneToMany\\Bundle\\AI\\Clients\\": "src/"
+            "OneToMany\\LlmSdkBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "OneToMany\\Bundle\\AI\\Clients\\Tests\\": "tests/"
+            "OneToMany\\LlmSdkBundle\\Tests\\": "tests/"
         }
     },
     "scripts": {

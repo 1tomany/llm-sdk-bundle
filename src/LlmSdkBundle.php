@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\Bundle\AI\Clients;
+namespace OneToMany\LlmSdkBundle;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,10 +8,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class ClientsBundle extends AbstractBundle
+class LlmSdkBundle extends AbstractBundle
 {
-    protected string $extensionAlias = 'ai_clients';
-
     /**
      * @var non-empty-list<'file'|'query'>
      */
@@ -59,7 +57,7 @@ class ClientsBundle extends AbstractBundle
 
         foreach ($config as $vendor => $vendorConfig) {
             foreach ($this->clients as $idx => $client) {
-                $id = "1tomany.ai.clients.client.{$vendor}.{$client}";
+                $id = "1tomany.llmsdk.client.{$vendor}.{$client}";
 
                 if (!$builder->has($id)) {
                     continue;

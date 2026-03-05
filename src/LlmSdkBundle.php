@@ -42,6 +42,8 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 
 class LlmSdkBundle extends AbstractBundle
 {
+    protected string $extensionAlias = 'onetomany_llmsdk';
+
     /**
      * @param DefinitionConfigurator<'array'> $definition
      */

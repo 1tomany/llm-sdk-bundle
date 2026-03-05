@@ -12,10 +12,10 @@ composer require 1tomany/llm-sdk-bundle
 
 ## Configuration
 
-Below is the complete configuration for this bundle. To customize it for your Symfony application, create a file named `llm_sdk.yaml` in `config/packages/` and make the necessary changes.
+Below is the complete configuration for this bundle. To customize it for your Symfony application, create a file named `onetomany_llmsdk.yaml` in `config/packages/` and make the necessary changes.
 
 ```yaml
-llm_sdk:
+onetomany_llmsdk:
     anthropic:
         api_key: "%env(ANTHROPIC_API_KEY)%"
         http_client: "http_client"
@@ -30,7 +30,7 @@ llm_sdk:
         serializer: "serializer"
 
 when@dev:
-    llm_sdk:
+    onetomany_llmsdk:
         mock:
             enabled: true
 ```
@@ -40,7 +40,7 @@ By default, the `http_client` and `serializer` properties in the `anthropic`, `g
 If you wish to disable a vendor, simply delete the configuration block from the file. For example, if your application only uses Gemini, you would delete the `anthropic` and `openai` blocks, leaving you with:
 
 ```yaml
-llm_sdk:
+onetomany_llmsdk:
     gemini:
         api_key: "%env(GEMINI_API_KEY)%"
 ```

@@ -220,37 +220,5 @@ class LlmSdkBundle extends AbstractBundle
                     ->tag('onetomany.llmsdk.client.query')
                     ->parent(OpenAiBaseClient::class)
         ;
-
-        // $container->import('../config/services.php');
-
-        /*
-        foreach ($config as $vendor => $vendorConfig) {
-            foreach ($this->clients as $idx => $client) {
-                $id = "1tomany.llmsdk.client.{$vendor}.{$client}";
-
-                if (!$builder->has($id)) {
-                    continue;
-                }
-
-                if (!$vendorConfig['enabled']) {
-                    $builder->removeDefinition($id);
-                } else {
-                    $definition = $builder->getDefinition($id);
-
-                    if ($apiKey = $vendorConfig['api_key'] ?? null) {
-                        $definition->setArgument('$apiKey', $apiKey);
-                    }
-
-                    if (null !== $httpClient = $vendorConfig['http_client'] ?? null) {
-                        $definition->setArgument('$httpClient', new Reference($httpClient));
-                    }
-
-                    if (null !== $serializer = $vendorConfig['serializer'] ?? null) {
-                        $definition->setArgument('$denormalizer', new Reference($serializer));
-                    }
-                }
-            }
-        }
-        */
     }
 }

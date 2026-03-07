@@ -18,10 +18,12 @@ Below is the complete configuration for this bundle. To customize it for your Sy
 onetomany_llmsdk:
     anthropic:
         api_key: "%env(ANTHROPIC_API_KEY)%"
+        api_version: "2023-06-01"
         http_client: "http_client"
         serializer: "serializer"
     gemini:
         api_key: "%env(GEMINI_API_KEY)%"
+        api_version: "v1beta"
         http_client: "http_client"
         serializer: "serializer"
     openai:
@@ -46,6 +48,10 @@ onetomany_llmsdk:
 ```
 
 You'll also have to define the API keys in your `.env` file or by using the [Symfony Secrets](https://symfony.com/doc/current/configuration/secrets.html) component.
+
+## Commands
+
+- `onetomany:llm-sdk:list-models` console command to list all available models by LLM client
 
 ## Usage
 

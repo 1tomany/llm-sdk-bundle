@@ -18,10 +18,12 @@ Below is the complete configuration for this bundle. To customize it for your Sy
 onetomany_llmsdk:
     anthropic:
         api_key: "%env(ANTHROPIC_API_KEY)%"
+        api_version: "2023-06-01"
         http_client: "http_client"
         serializer: "serializer"
     gemini:
         api_key: "%env(GEMINI_API_KEY)%"
+        api_version: "v1beta"
         http_client: "http_client"
         serializer: "serializer"
     openai:

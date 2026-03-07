@@ -19,6 +19,7 @@ use OneToMany\LlmSdk\Contract\Action\File\UploadFileActionInterface;
 use OneToMany\LlmSdk\Contract\Action\Query\CompileQueryActionInterface;
 use OneToMany\LlmSdk\Contract\Action\Query\ExecuteQueryActionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
+use OneToMany\LlmSdkBundle\Command\ListModelsCommand;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -131,6 +132,10 @@ class LlmSdkBundle extends AbstractBundle
     {
         $container
             ->services()
+                // Commands
+                ->set(ListModelsCommand::class)
+                    ->tag('console.command')
+
                 // Factories
                 ->set(ClientFactory::class)
                     ->arg('$clients', tagged_iterator('onetomany.llmsdk.client'))

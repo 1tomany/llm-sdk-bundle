@@ -2,29 +2,28 @@
 
 namespace OneToMany\LlmSdkBundle\Command;
 
-use OneToMany\LlmSdk\Client\Anthropic\AnthropicClient;
-use OneToMany\LlmSdk\Client\Gemini\GeminiClient;
-use OneToMany\LlmSdk\Client\OpenAi\OpenAiClient;
-use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function array_map;
+
 final class ListModelsCommand extends Command
 {
-    /**
-     * @var non-empty-list<class-string<ClientInterface>>
-     */
-    private array $clients = [
-        AnthropicClient::class,
-        GeminiClient::class,
-        OpenAiClient::class,
-    ];
-
     public function __invoke(SymfonyStyle $io): int
     {
-        foreach ($this->clients as $client) {
-            $io->section($client);
-            $io->listing($client::getModels());
+        $getModels = function (Vendor $vendor): array {
+            $mapper = function (Model $model): string {
+                return $model->getValue();
+            };
+
+            return array_map($mapper, $vendor->getModels());
+        };
+
+        foreach (Vendor::cases() as $vendor) {
+            $io->section($vendor->getValue());
+            $io->listing($getModels($vendor));
         }
 
         return Command::SUCCESS;
@@ -37,6 +36,6 @@ final class ListModelsCommand extends Command
     {
         $this
             ->setName('onetomany:llm-sdk:list-models')
-            ->setDescription('Lists all available models by client');
+            ->setDescription('Lists all available models by vendor');
     }
 }

@@ -7,7 +7,8 @@ use OneToMany\LlmSdk\Action\Batch\ReadBatchAction;
 use OneToMany\LlmSdk\Action\File\DeleteFileAction;
 use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
-use OneToMany\LlmSdk\Action\Query\ExecuteQueryAction;
+use OneToMany\LlmSdk\Action\Query\EmbedContentAction;
+use OneToMany\LlmSdk\Action\Query\GenerateOutputAction;
 use OneToMany\LlmSdk\Client\Anthropic\AnthropicClient;
 use OneToMany\LlmSdk\Client\Gemini\GeminiClient;
 use OneToMany\LlmSdk\Client\Mock\MockClient;
@@ -17,7 +18,8 @@ use OneToMany\LlmSdk\Contract\Action\Batch\ReadBatchActionInterface;
 use OneToMany\LlmSdk\Contract\Action\File\DeleteFileActionInterface;
 use OneToMany\LlmSdk\Contract\Action\File\UploadFileActionInterface;
 use OneToMany\LlmSdk\Contract\Action\Query\CompileQueryActionInterface;
-use OneToMany\LlmSdk\Contract\Action\Query\ExecuteQueryActionInterface;
+use OneToMany\LlmSdk\Contract\Action\Query\EmbedContentActionInterface;
+use OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdkBundle\Command\ListModelsCommand;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -26,7 +28,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
 
 class LlmSdkBundle extends AbstractBundle
 {
@@ -138,7 +140,7 @@ class LlmSdkBundle extends AbstractBundle
 
                 // Factories
                 ->set(ClientFactory::class)
-                    ->arg('$clients', tagged_iterator('onetomany.llmsdk.client'))
+                    ->arg('$container', tagged_locator('onetomany.llmsdk.client', 'vendor'))
 
                 // Batch Actions
                 ->set(CreateBatchAction::class)
@@ -160,27 +162,30 @@ class LlmSdkBundle extends AbstractBundle
                 ->set(CompileQueryAction::class)
                     ->arg('$clientFactory', service(ClientFactory::class))
                     ->alias(CompileQueryActionInterface::class, service(CompileQueryAction::class))
-                ->set(ExecuteQueryAction::class)
+                ->set(EmbedContentAction::class)
                     ->arg('$clientFactory', service(ClientFactory::class))
-                    ->alias(ExecuteQueryActionInterface::class, service(ExecuteQueryAction::class))
+                    ->alias(EmbedContentActionInterface::class, service(EmbedContentAction::class))
+                ->set(GenerateOutputAction::class)
+                    ->arg('$clientFactory', service(ClientFactory::class))
+                    ->alias(GenerateOutputActionInterface::class, service(GenerateOutputAction::class))
 
                 // Clients
                 ->set(AnthropicClient::class)
-                    ->tag('onetomany.llmsdk.client')
+                    ->tag('onetomany.llmsdk.client', ['vendor' => 'anthropic'])
                     ->arg('$httpClient', service($config['anthropic']['http_client']))
                     ->arg('$serializer', service($config['anthropic']['serializer']))
                     ->arg('$apiKey', $config['anthropic']['api_key'])
                     ->arg('$apiVersion', $config['anthropic']['api_version'])
                 ->set(GeminiClient::class)
-                    ->tag('onetomany.llmsdk.client')
+                    ->tag('onetomany.llmsdk.client', ['vendor' => 'gemini'])
                     ->arg('$httpClient', service($config['gemini']['http_client']))
                     ->arg('$serializer', service($config['gemini']['serializer']))
                     ->arg('$apiKey', $config['gemini']['api_key'])
                     ->arg('$apiVersion', $config['gemini']['api_version'])
                 ->set(MockClient::class)
-                    ->tag('onetomany.llmsdk.client')
+                    ->tag('onetomany.llmsdk.client', ['vendor' => 'mock'])
                 ->set(OpenAiClient::class)
-                    ->tag('onetomany.llmsdk.client')
+                    ->tag('onetomany.llmsdk.client', ['vendor' => 'openai'])
                     ->arg('$httpClient', service($config['openai']['http_client']))
                     ->arg('$serializer', service($config['openai']['serializer']))
                     ->arg('$apiKey', $config['openai']['api_key'])

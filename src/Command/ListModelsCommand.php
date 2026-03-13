@@ -14,7 +14,7 @@ final class ListModelsCommand extends Command
     {
         foreach (Vendor::cases() as $vendor) {
             $io->section($vendor->getName());
-            $io->listing(array_map(fn ($m): string => $m->getValue(), $vendor->getModels()));
+            $io->listing($this->findModels($vendor));
         }
 
         return Command::SUCCESS;
@@ -28,5 +28,13 @@ final class ListModelsCommand extends Command
         $this
             ->setName('onetomany:llm-sdk:list-models')
             ->setDescription('Lists all available models by vendor');
+    }
+
+    /**
+     * @return list<non-empty-lowercase-string>
+     */
+    private function findModels(Vendor $vendor): array
+    {
+        return array_map(fn ($m): string => $m->getValue(), $vendor->getModels());
     }
 }

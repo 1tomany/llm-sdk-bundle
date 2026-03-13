@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdkBundle\Command;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -12,9 +13,20 @@ final class ListModelsCommand extends Command
 {
     public function __invoke(SymfonyStyle $io): int
     {
+        /**
+         * @return list<non-empty-lowercase-string>
+         */
+        $findModels = function (Vendor $vendor): array {
+            $mapper = function (Model $model): string {
+                return $model->getValue();
+            };
+
+            return array_map($mapper, $vendor->getModels());
+        };
+
         foreach (Vendor::cases() as $vendor) {
             $io->section($vendor->getName());
-            $io->listing($this->findModels($vendor));
+            $io->listing($findModels($vendor));
         }
 
         return Command::SUCCESS;
@@ -28,13 +40,5 @@ final class ListModelsCommand extends Command
         $this
             ->setName('onetomany:llm-sdk:list-models')
             ->setDescription('Lists all available models by vendor');
-    }
-
-    /**
-     * @return list<non-empty-lowercase-string>
-     */
-    private function findModels(Vendor $vendor): array
-    {
-        return array_map(fn ($m): string => $m->getValue(), $vendor->getModels());
     }
 }

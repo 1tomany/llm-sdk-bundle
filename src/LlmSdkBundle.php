@@ -140,7 +140,7 @@ class LlmSdkBundle extends AbstractBundle
 
                 // Factories
                 ->set(ClientFactory::class)
-                    ->arg('$clients', tagged_locator('onetomany.llmsdk.client', 'key'))
+                    ->arg('$container', tagged_locator('onetomany.llmsdk.client', 'key'))
 
                 // Batch Actions
                 ->set(CreateBatchAction::class)

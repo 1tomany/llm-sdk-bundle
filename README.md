@@ -69,6 +69,9 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 
+use function mime_content_type;
+use function sprintf;
+
 final readonly class QueryFileHandler
 {
     public function __construct(
@@ -77,7 +80,7 @@ final readonly class QueryFileHandler
     ) {
     }
 
-    public function __invoke(string $path, string $format, string $prompt): void
+    public function __invoke(string $path, string $prompt): void
     {
         $vendor = 'gemini';
         // $vendor = OneToMany\LlmSdk\Contract\Enum\Vendor::Gemini;
@@ -85,14 +88,18 @@ final readonly class QueryFileHandler
         $model = 'gemini-2.5-flash';
         // $model = OneToMany\LlmSdk\Contract\Enum\Model::Gemini25Flash;
 
-        // Upload the file to cache it with the model
-        $uploadRequest = new UploadFileRequest('gemini', $path)->usingFormat($format);
+        if (!$format = mime_content_type($path)) {
+            throw new \InvalidArgumentException(sprintf('Failed to determine the format of the file "%s".', $path));
+        }
+
+        // Upload the file to cache it with the model vendor
+        $uploadFileRequest = new UploadFileRequest('gemini', $path)->usingFormat($format);
 
         $response = $this->uploadFileAction->act(...[
-            'request' => $uploadRequest,
+            'request' => $uploadFileRequest,
         ]);
 
-        // $response instanceof OneToMany\LlmSdk\Response\File\UploadResponse
+        // $response instanceof OneToMany\LlmSdk\Response\File\UploadFileResponse
         $uri = $response->getUri();
 
         // Compile a query to generate output

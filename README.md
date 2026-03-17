@@ -63,7 +63,11 @@ Any action interface can be injected into a service. Because you can have multip
 namespace App\File\Action\Handler;
 
 use OneToMany\LlmSdk\Contract\Action\File\UploadFileActionInterface;
-use OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface;
+use OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface;
+use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 
 final readonly class QueryFileHandler
 {
@@ -75,10 +79,14 @@ final readonly class QueryFileHandler
 
     public function __invoke(string $path, string $format, string $prompt): void
     {
+        $vendor = 'gemini';
+        // $vendor = OneToMany\LlmSdk\Contract\Enum\Vendor::Gemini;
+
         $model = 'gemini-2.5-flash';
+        // $model = OneToMany\LlmSdk\Contract\Enum\Model::Gemini25Flash;
 
         // Upload the file to cache it with the model
-        $uploadRequest = new UploadRequest('gemini')->atPath($path)->withFormat($format);
+        $uploadRequest = new UploadFileRequest('gemini', $path)->usingFormat($format);
 
         $response = $this->uploadFileAction->act(...[
             'request' => $uploadRequest,
@@ -87,14 +95,16 @@ final readonly class QueryFileHandler
         // $response instanceof OneToMany\LlmSdk\Response\File\UploadResponse
         $uri = $response->getUri();
 
-        // Compile a query and generate output using the prompt and the cached file
-        $compileRequest = new CompileRequest($model)->withPrompt($prompt)->withFileUri($uri, $format);
+        // Compile a query to generate output
+        $compileQueryRequest = new CompileQueryRequest($model)
+            ->withUserPrompt($prompt)
+            ->withFile($uri, $format);
 
         $response = $this->generateOutputAction->act(...[
-            'request' => $compileRequest,
+            'request' => $compileQueryRequest,
         ]);
 
-        // $response instanceof OneToMany\LlmSdk\Response\Query\GenerateResponse
+        // $response instanceof OneToMany\LlmSdk\Response\Output\GenerateOutputResponse
         printf("Model output: %s\n", $response->getOutput());
     }
 }
